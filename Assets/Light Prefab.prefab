@@ -23,7 +23,8 @@ GameObject:
   - component: {fileID: 23218879542436826}
   - component: {fileID: 95239026058527474}
   - component: {fileID: 64691331456758742}
-  m_Layer: 0
+  - component: {fileID: 114372637686428046}
+  m_Layer: 10
   m_Name: Light Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,7 +109,7 @@ Animator:
   m_GameObject: {fileID: 1928276430414272}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 55eeaeeef507f6a4a9ec67b47ad24200, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6f0ba12e3410e4c49960104228bff880, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -117,3 +118,17 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114372637686428046
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1928276430414272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61337b0b9bec1634e9c594b8fbfa1159, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  length: 10
+  lengthProgress: 0
+  opacity: 0
