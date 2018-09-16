@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
     private CharacterController controller;
@@ -11,10 +12,8 @@ public class Player : MonoBehaviour {
     public float mouseXSensitivity = 500.0f;
     public float jumpVelocity = 10.0f;
     public float gravity = 1.0f;
+    public Vector3 laserPosition;
     private float yVelocity;
-    public const float MAX_DISTANCE = 1000.0f;
-    public GameObject lightPrefab;
-    private GameObject currentLight;
     private YLook yLook;
 
     // Use this for initialization
@@ -22,30 +21,6 @@ public class Player : MonoBehaviour {
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         yLook = GetComponent<YLook>();
-    }
-
-    bool ShootBeam(Vector3 fromPosition, Vector3 direction, int depth = 0) {
-        if (currentLight != null) {
-            currentLight.GetComponent<LightMesh>().Kill();
-            currentLight = null;
-        }
-        if (depth > 20) {
-            return false;
-        }
-        RaycastHit hit;
-        // exclude player and ground
-        int mask = ~(1 << 9 | 1 << 10);
-        if (Physics.Raycast(fromPosition, direction, out hit, MAX_DISTANCE, mask)) {
-            // Vector3 hitPoint = direction * hit.distance;
-            GameObject newLaser = (GameObject) Instantiate(lightPrefab, fromPosition, Quaternion.LookRotation(direction));
-            float hitDistance = hit.distance * direction.magnitude;
-            newLaser.GetComponent<LightMesh>().length = hitDistance;
-            currentLight = newLaser;
-            // TODO: hit mirror
-            return true;
-        } else {
-            return false;
-        }
     }
 
     // Update is called once per frame
@@ -82,7 +57,12 @@ public class Player : MonoBehaviour {
         Quaternion q = Quaternion.AngleAxis(xRotation, Vector3.up);
         transform.localRotation = q;
         if (Input.GetButtonDown("Fire1")) {
-            ShootBeam(transform.position, transform.localRotation * yLook.rotation * Vector3.forward);
+            GetComponent<LaserFire>().ShootBeam(transform.TransformPoint(laserPosition), transform.localRotation * yLook.rotation * Vector3.forward);
+        }
+        if (transform.position.y < 0) {
+            SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
+            // SceneManager.LoadScene("SampleScene");
+            // Debug.Log("oh no");
         }
     }
 }

@@ -8,6 +8,9 @@ public class LightMesh : MonoBehaviour {
     public float length = 10.0f;
     public float lengthProgress = 0.01f;
     public float opacity = 0.0f;
+    public GameObject hitObject { get; private set; }
+
+    public void Hit(GameObject target) { hitObject = target; }
 
     void RecreateMesh() {
         float len = length * lengthProgress;
@@ -72,5 +75,14 @@ public class LightMesh : MonoBehaviour {
         RecreateMesh();
         material.SetColor("_EmissionColor", new Color(opacity, opacity, opacity, 1.0f));
         GetComponent<MeshCollider>().enabled = opacity > 0.99f;
+    }
+
+    void LateUpdate() {
+        if (hitObject != null && opacity > 0.99f) {
+            LaserFire laser = hitObject.GetComponent<LaserFire>();
+            if (laser != null) {
+                laser.isFiring = true;
+            }
+        }
     }
 }
