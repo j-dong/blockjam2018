@@ -6,9 +6,12 @@ public class Player : MonoBehaviour {
 	private CharacterController controller;
     private Animator animator;
     private float xRotation;
-    public float Speed;
+    public float Speed = 1.0f;
     public float FowardMultiplier = 2.0f;
-    public float mouseXSensitivity;
+    public float mouseXSensitivity = 500.0f;
+    public float jumpVelocity = 10.0f;
+    public float gravity = 1.0f;
+    private float yVelocity;
 
 	// Use this for initialization
 	void Start () {
@@ -21,7 +24,22 @@ public class Player : MonoBehaviour {
         float speed;
         speed = Vector3.Dot(controller.velocity, transform.localRotation * Vector3.forward);
         animator.SetFloat("Speed", speed);
-        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        bool jump = false;
+        if (controller.isGrounded)
+        {
+            yVelocity = 0.0f;
+            if (Input.GetButton("Jump"))
+            {
+                yVelocity = jumpVelocity;
+                jump = true;
+            }
+        }
+        else
+        {
+            yVelocity -= gravity * Time.deltaTime;
+        }
+        animator.SetBool("Jump", jump);
+        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), yVelocity, Input.GetAxis("Vertical"));
         if (move.z > 0) {
             move.Scale(new Vector3(1.0f, 1.0f, FowardMultiplier));
         }
